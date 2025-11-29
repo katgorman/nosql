@@ -4,16 +4,23 @@ const mongoose = require('mongoose');
 const itemSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true, // remove whitespace
   },
   quantity: {
     type: Number,
-    default: 1
+    default: 1,
+    min: 0, // quantity cannot be negative
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 0, // price cannot be negative
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 // export the model so it can be used in other files
