@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// define a schema for the "Item" collection
 const itemSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -15,4 +16,5 @@ const itemSchema = new mongoose.Schema({
   }
 });
 
+// export the model so it can be used in other files
 module.exports = mongoose.model('Item', itemSchema);
