@@ -1,5 +1,6 @@
 # Inventory System 
-A simple web-based inventory manager built with Node.js, Express, and MongoDB. 
+A simple web-based inventory manager built with Node.js, Express, and MongoDB.
+**Repo:** [https://github.com/katgorman/no-sql](https://github.com/katgorman/no-sql/tree/main)
 
 ## Team Members
 - Kat Gorman
