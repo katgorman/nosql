@@ -3,10 +3,8 @@ const API_URL = "/api/items";
 
 // fetches all items from the server and display them in a table
 async function loadItems() {
-  // send a GET request to the API to get all items
-  const res = await fetch(API_URL);
-  // parse the JSON response into a JavaScript array
-  const items = await res.json();
+  const res = await fetch(API_URL); // send a GET request to the API to get all items
+  const items = await res.json();   // parse the JSON response into a JavaScript array
 
   // get the table element from the HTML where items will be displayed
   const table = document.getElementById("items-table");
@@ -21,7 +19,7 @@ async function loadItems() {
         <td>$${item.price}</td>  <!-- Display item price -->
         <td>
           <!-- Buttons to update or delete the item -->
-          <button onclick="updateItem('${item._id}')">Update</button>
+          <button onclick="updateItem('${item._id}', '${item.name}', ${item.price}, ${item.quantity})">Update</button>
           <button onclick="deleteItem('${item._id}')">Delete</button>
         </td>
       </tr>
@@ -40,30 +38,65 @@ async function createItem() {
   await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" }, // specify JSON content
-    body: JSON.stringify({ name, quantity, price })   // convert JS object to JSON string
+    body: JSON.stringify({ name, quantity, price })  // convert JS object to JSON string
   });
 
   // reload the items table to show the new item
   loadItems();
 }
 
-// updates an item's quantity
-async function updateItem(id) {
-  // ask the user for the new quantity using a prompt
-  const quantity = prompt("New quantity:");
-  // if the user cancels or enters nothing, exit the function
-  if (!quantity) return;
+// updates an item
+let currentItemId = null;
+let originalName = "";
+let originalPrice = "";
+let originalQuantity = "";
 
-  // send a PUT request to update the specific item by its ID
-  await fetch(`${API_URL}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ quantity }) // send updated quantity
-  });
+// open modal with pre-filled data
+function updateItem(id, name, price, quantity) {
+    currentItemId = id;
 
-  // reload the items table to show the updated quantity
-  loadItems();
+    // store original values in case fields are left blank
+    originalName = name;
+    originalPrice = price;
+    originalQuantity = quantity;
+
+    document.getElementById("editName").value = name;
+    document.getElementById("editPrice").value = price;
+    document.getElementById("editQuantity").value = quantity;
+
+    document.getElementById("updateModal").style.display = "flex";
 }
+
+// close modal
+function closeModal() {
+    document.getElementById("updateModal").style.display = "none";
+}
+
+// save update
+document.getElementById("saveUpdate").onclick = async function () {
+    let newName = document.getElementById("editName").value.trim();
+    let newPrice = document.getElementById("editPrice").value.trim();
+    let newQuantity = document.getElementById("editQuantity").value.trim();
+
+    // keep old values if empty
+    if (newName === "") newName = originalName;
+    if (newPrice === "") newPrice = originalPrice;
+    if (newQuantity === "") newQuantity = originalQuantity;
+
+    await fetch(`/api/items/${currentItemId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: newName,
+            price: Number(newPrice),
+            quantity: Number(newQuantity)
+        })
+    });
+
+    closeModal();
+    loadItems();
+};
+
 
 // deletes an item
 async function deleteItem(id) {

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const itemSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: true, 
     trim: true, // remove whitespace
   },
   quantity: {
