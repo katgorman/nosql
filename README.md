@@ -16,7 +16,6 @@ A simple web-based inventory manager built with Node.js, Express, and MongoDB.
 4. **Run the server**  
    `npm start`
 5. **Open the app**  
-   Open `public/index.html` in your browser.
 
 ## API Endpoints
 | Method | Endpoint        | Action                 |
